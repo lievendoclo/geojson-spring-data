@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+group = "be.insaneprogramming"
+version = "0.1"
+description = "An awesome groovy library"
+
+repositories {
+    jcenter()
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
+
+dependencies {
+    compile 'org.springframework.data:spring-data-mongodb:1.6.1.RELEASE'
+    testCompile 'junit:junit:4.11'
+    testCompile 'com.github.fakemongo:fongo:1.5.7'
+}
