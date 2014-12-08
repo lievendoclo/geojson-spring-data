@@ -1,30 +1,23 @@
 package be.insaneprogramming.geojson;
 
-import com.mongodb.util.JSON;
-import com.github.fakemongo.Fongo;
+import be.insaneprogramming.util.EmbeddedMongoDbTest;
 import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class GeoJsonConvertersTest {
-    private Fongo fongo;
-
-    @Before
-    public void createFongo() {
-        fongo = new Fongo("InMemory");
-    }
+public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
 
     @Test
     public void testPointConverter() {
         Point point = new Point(100., 200.);
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(point);
-        fongo.getDB("test").getCollection("test").save(object);
-        DBObject dbObject = fongo.getDB("test").getCollection("test").findOne();
+        getTestDatabase().getCollection("test").save(object);
+        DBObject dbObject = getTestDatabase().getCollection("test").findOne();
         System.out.println(JSON.serialize(dbObject));
         Point dbPoint = GeoJsonConverters.DBObjectToPointConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbPoint, CoreMatchers.equalTo(point));
@@ -37,8 +30,8 @@ public class GeoJsonConvertersTest {
                 new Point(300., 400.));
         MultiPoint multiPoint = new MultiPoint(points);
                 DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiPoint);
-        fongo.getDB("test").getCollection("test").save(object);
-        DBObject dbObject = fongo.getDB("test").getCollection("test").findOne();
+        getTestDatabase().getCollection("test").save(object);
+        DBObject dbObject = getTestDatabase().getCollection("test").findOne();
         System.out.println(JSON.serialize(dbObject));
         MultiPoint dbMultiPoint = GeoJsonConverters.DBObjectToMultiPointConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiPoint, CoreMatchers.equalTo(multiPoint));
@@ -51,8 +44,8 @@ public class GeoJsonConvertersTest {
                 new Point(300., 400.));
         LineString multiPoint = new LineString(points);
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiPoint);
-        fongo.getDB("test").getCollection("test").save(object);
-        DBObject dbObject = fongo.getDB("test").getCollection("test").findOne();
+        getTestDatabase().getCollection("test").save(object);
+        DBObject dbObject = getTestDatabase().getCollection("test").findOne();
         System.out.println(JSON.serialize(dbObject));
         LineString dbMultiPoint = GeoJsonConverters.DBObjectToLineStringConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiPoint, CoreMatchers.equalTo(multiPoint));
@@ -62,8 +55,8 @@ public class GeoJsonConvertersTest {
     public void testSimplePolygonConverter() {
         Polygon polygon = new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)));
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(polygon);
-        fongo.getDB("test").getCollection("test").save(object);
-        DBObject dbObject = fongo.getDB("test").getCollection("test").findOne();
+        getTestDatabase().getCollection("test").save(object);
+        DBObject dbObject = getTestDatabase().getCollection("test").findOne();
         System.out.println(JSON.serialize(dbObject));
         Polygon dbPolygon = GeoJsonConverters.DBObjectToPolygonConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbPolygon, CoreMatchers.equalTo(polygon));
@@ -76,8 +69,8 @@ public class GeoJsonConvertersTest {
                 Arrays.asList(new Point(300., 400.), new Point(400., 500.)));
         Polygon polygon = new Polygon(points);
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(polygon);
-        fongo.getDB("test").getCollection("test").save(object);
-        DBObject dbObject = fongo.getDB("test").getCollection("test").findOne();
+        getTestDatabase().getCollection("test").save(object);
+        DBObject dbObject = getTestDatabase().getCollection("test").findOne();
         System.out.println(JSON.serialize(dbObject));
         Polygon dbPolygon = GeoJsonConverters.DBObjectToPolygonConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbPolygon, CoreMatchers.equalTo(polygon));
@@ -90,8 +83,8 @@ public class GeoJsonConvertersTest {
                 new LineString(Arrays.asList(new Point(300., 400.), new Point(400., 500.))));
         MultiLineString multiLineString = new MultiLineString(points);
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiLineString);
-        fongo.getDB("test").getCollection("test").save(object);
-        DBObject dbObject = fongo.getDB("test").getCollection("test").findOne();
+        getTestDatabase().getCollection("test").save(object);
+        DBObject dbObject = getTestDatabase().getCollection("test").findOne();
         System.out.println(JSON.serialize(dbObject));
         MultiLineString dbMultiLineString = GeoJsonConverters.DBObjectToMultiLineStringConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiLineString, CoreMatchers.equalTo(multiLineString));
@@ -104,8 +97,8 @@ public class GeoJsonConvertersTest {
                 new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.))));
         MultiPolygon multiPolygon = new MultiPolygon(polygons);
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiPolygon);
-        fongo.getDB("test").getCollection("test").save(object);
-        DBObject dbObject = fongo.getDB("test").getCollection("test").findOne();
+        getTestDatabase().getCollection("test").save(object);
+        DBObject dbObject = getTestDatabase().getCollection("test").findOne();
         System.out.println(JSON.serialize(dbObject));
         MultiPolygon dbMultiPolygon  = GeoJsonConverters.DBObjectToMultiPolygonStringConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiPolygon, CoreMatchers.equalTo(multiPolygon));
