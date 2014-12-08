@@ -31,6 +31,8 @@ public class GeoJsonConverters {
             DBObject dbObject = new BasicDBObject();
             dbObject.put("type", source.getType());
             dbObject.put("coordinates", source);
+            if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
+                dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
         }
     }
