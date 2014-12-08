@@ -2,7 +2,6 @@ package be.insaneprogramming.geojson;
 
 import be.insaneprogramming.util.EmbeddedMongoDbTest;
 import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,7 +17,6 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(point);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
-        System.out.println(JSON.serialize(dbObject));
         Point dbPoint = GeoJsonConverters.DBObjectToPointConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbPoint, CoreMatchers.equalTo(point));
     }
@@ -32,7 +30,6 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
                 DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiPoint);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
-        System.out.println(JSON.serialize(dbObject));
         MultiPoint dbMultiPoint = GeoJsonConverters.DBObjectToMultiPointConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiPoint, CoreMatchers.equalTo(multiPoint));
     }
@@ -46,7 +43,6 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiPoint);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
-        System.out.println(JSON.serialize(dbObject));
         LineString dbMultiPoint = GeoJsonConverters.DBObjectToLineStringConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiPoint, CoreMatchers.equalTo(multiPoint));
     }
@@ -57,7 +53,6 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(polygon);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
-        System.out.println(JSON.serialize(dbObject));
         Polygon dbPolygon = GeoJsonConverters.DBObjectToPolygonConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbPolygon, CoreMatchers.equalTo(polygon));
     }
@@ -71,7 +66,6 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(polygon);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
-        System.out.println(JSON.serialize(dbObject));
         Polygon dbPolygon = GeoJsonConverters.DBObjectToPolygonConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbPolygon, CoreMatchers.equalTo(polygon));
     }
@@ -85,7 +79,6 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiLineString);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
-        System.out.println(JSON.serialize(dbObject));
         MultiLineString dbMultiLineString = GeoJsonConverters.DBObjectToMultiLineStringConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiLineString, CoreMatchers.equalTo(multiLineString));
     }
@@ -99,7 +92,6 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
         DBObject object = GeoJsonConverters.GeoJsonObjectToDBObjectConverter.INSTANCE.convert(multiPolygon);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
-        System.out.println(JSON.serialize(dbObject));
         MultiPolygon dbMultiPolygon  = GeoJsonConverters.DBObjectToMultiPolygonStringConverter.INSTANCE.convert(dbObject);
         Assert.assertThat(dbMultiPolygon, CoreMatchers.equalTo(multiPolygon));
     }
