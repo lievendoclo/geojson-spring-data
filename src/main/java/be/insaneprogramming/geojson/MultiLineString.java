@@ -1,5 +1,6 @@
 package be.insaneprogramming.geojson;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 public class MultiLineString extends GeoJsonObject<LineString> {
@@ -13,6 +14,10 @@ public class MultiLineString extends GeoJsonObject<LineString> {
 
     public MultiLineString(Collection<? extends LineString> c) {
         super(c);
+    }
+
+    public MultiLineString(LineString... lineStrings) {
+        this(Arrays.asList(lineStrings));
     }
 
     MultiLineString(Object object) {

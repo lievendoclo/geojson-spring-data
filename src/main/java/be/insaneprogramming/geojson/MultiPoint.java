@@ -1,5 +1,6 @@
 package be.insaneprogramming.geojson;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 public class MultiPoint extends GeoJsonObject<Point> {
@@ -13,6 +14,10 @@ public class MultiPoint extends GeoJsonObject<Point> {
 
     public MultiPoint(Collection<? extends Point> c) {
         super(c);
+    }
+
+    public MultiPoint(Point... points) {
+        this(Arrays.asList(points));
     }
 
     MultiPoint(Object object) {

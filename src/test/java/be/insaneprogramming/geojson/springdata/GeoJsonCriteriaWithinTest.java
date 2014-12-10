@@ -29,7 +29,7 @@ public class GeoJsonCriteriaWithinTest extends EmbeddedMongoDbTest {
 
     @Test
     public void testPointWithinPolygon() {
-        Polygon polygon = new Polygon(Arrays.asList(Arrays.asList(new Point(5.,5.), new Point(15.,5.), new Point(15.,15.), new Point(5., 15.), new Point(5., 5.))));
+        Polygon polygon = new Polygon(new Point(5.,5.), new Point(15.,5.), new Point(15.,15.), new Point(5., 15.), new Point(5., 5.));
         Query query = Query.query(GeoJsonCriteria.where("location").within(polygon));
         List<GeoLocation> nearestLocations = getMongoTemplate().find(query, GeoLocation.class);
         assertThat(nearestLocations.size(), equalTo(1));
@@ -38,9 +38,9 @@ public class GeoJsonCriteriaWithinTest extends EmbeddedMongoDbTest {
 
     @Test
     public void testPointWithinMultiPolygon() {
-        Polygon polygon1 = new Polygon(Arrays.asList(Arrays.asList(new Point(5.,5.), new Point(15.,5.), new Point(15.,15.), new Point(5., 15.), new Point(5., 5.))));
-        Polygon polygon2 = new Polygon(Arrays.asList(Arrays.asList(new Point(15.,15.), new Point(25.,15.), new Point(25.,25.), new Point(15., 25.), new Point(15., 15.))));
-        MultiPolygon multiPolygon = new MultiPolygon(Arrays.asList(polygon1, polygon2));
+        Polygon polygon1 = new Polygon(new Point(5.,5.), new Point(15.,5.), new Point(15.,15.), new Point(5., 15.), new Point(5., 5.));
+        Polygon polygon2 = new Polygon(new Point(15.,15.), new Point(25.,15.), new Point(25.,25.), new Point(15., 25.), new Point(15., 15.));
+        MultiPolygon multiPolygon = new MultiPolygon(polygon1, polygon2);
         Query query = Query.query(GeoJsonCriteria.where("location").within(multiPolygon));
         List<GeoLocation> nearestLocations = getMongoTemplate().find(query, GeoLocation.class);
         assertThat(nearestLocations.size(), equalTo(2));

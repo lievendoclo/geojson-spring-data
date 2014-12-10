@@ -24,10 +24,7 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
 
     @Test
     public void testMultiPointConverter() {
-        List<Point> points = Arrays.asList(
-                new Point(100., 200.),
-                new Point(300., 400.));
-        MultiPoint multiPoint = new MultiPoint(points);
+        MultiPoint multiPoint = new MultiPoint(new Point(100., 200.), new Point(300., 400.));
                 DBObject object = GeoJsonConverters.MultiPointToDBObjectConverter.INSTANCE.convert(multiPoint);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
@@ -37,10 +34,7 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
 
     @Test
     public void testLineStringConverter() {
-        List<Point> points = Arrays.asList(
-                new Point(100., 200.),
-                new Point(300., 400.));
-        LineString multiPoint = new LineString(points);
+        LineString multiPoint = new LineString(new Point(100., 200.), new Point(300., 400.));
         DBObject object = GeoJsonConverters.LineStringToDBObjectConverter.INSTANCE.convert(multiPoint);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
@@ -50,7 +44,7 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
 
     @Test
     public void testSimplePolygonConverter() {
-        Polygon polygon = new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)));
+        Polygon polygon = new Polygon(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.));
         DBObject object = GeoJsonConverters.PolygonToDBObjectConverter.INSTANCE.convert(polygon);
         getTestDatabase().getCollection("test").save(object);
         DBObject dbObject = getTestDatabase().getCollection("test").findOne();
@@ -74,8 +68,8 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
     @Test
     public void testMultiLineStringConverter() {
         List<LineString> points = Arrays.asList(
-                new LineString(Arrays.asList(new Point(100., 200.), new Point(200., 300.))),
-                new LineString(Arrays.asList(new Point(300., 400.), new Point(400., 500.))));
+                new LineString(new Point(100., 200.), new Point(200., 300.)),
+                new LineString(new Point(300., 400.), new Point(400., 500.)));
         MultiLineString multiLineString = new MultiLineString(points);
         DBObject object = GeoJsonConverters.MultiLineStringToDBObjectConverter.INSTANCE.convert(multiLineString);
         getTestDatabase().getCollection("test").save(object);
@@ -87,8 +81,8 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
     @Test
     public void testMultiPolygonConverter() {
         List<Polygon> polygons = Arrays.asList(
-               new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.))),
-                new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.))));
+               new Polygon(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)),
+                new Polygon(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)));
         MultiPolygon multiPolygon = new MultiPolygon(polygons);
         DBObject object = GeoJsonConverters.MultiPolygonToDBObjectConverter.INSTANCE.convert(multiPolygon);
         getTestDatabase().getCollection("test").save(object);
@@ -100,22 +94,16 @@ public class GeoJsonConvertersTest extends EmbeddedMongoDbTest {
     @Test
     public void testGeometryCollectionConverter() {
         Point point = new Point(100., 200.);
-        MultiPoint multiPoint = new MultiPoint(Arrays.asList(
-                new Point(100., 200.),
-                new Point(300., 400.)));
-        LineString lineString = new LineString(Arrays.asList(
-                new Point(100., 200.),
-                new Point(300., 400.)));
-        Polygon polygon = new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)));
+        MultiPoint multiPoint = new MultiPoint(new Point(100., 200.), new Point(300., 400.));
+        LineString lineString = new LineString(new Point(100., 200.), new Point(300., 400.));
+        Polygon polygon = new Polygon(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.));
         Polygon extendedPolygon = new Polygon(Arrays.asList(
                 Arrays.asList(new Point(100., 200.), new Point(200., 300.)),
                 Arrays.asList(new Point(300., 400.), new Point(400., 500.))));
-        MultiLineString multiLineString = new MultiLineString(Arrays.asList(
-                new LineString(Arrays.asList(new Point(100., 200.), new Point(200., 300.))),
-                new LineString(Arrays.asList(new Point(300., 400.), new Point(400., 500.)))));
-        MultiPolygon multiPolygon = new MultiPolygon(Arrays.asList(
-                new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.))),
-                new Polygon(Arrays.asList(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)))));
+        MultiLineString multiLineString = new MultiLineString( new LineString(new Point(100., 200.), new Point(200., 300.)),
+                new LineString(new Point(300., 400.), new Point(400., 500.)));
+        MultiPolygon multiPolygon = new MultiPolygon(new Polygon(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)),
+                new Polygon(new Point(300., 400.), new Point(400., 500.), new Point(500., 600.)));
         GeometryCollection collection = new GeometryCollection(Arrays.asList(point, multiPoint, lineString, polygon, extendedPolygon, multiLineString, multiPolygon));
         DBObject object = GeoJsonConverters.GeometryCollectionToDBObjectConverter.INSTANCE.convert(collection);
         getTestDatabase().getCollection("test").save(object);

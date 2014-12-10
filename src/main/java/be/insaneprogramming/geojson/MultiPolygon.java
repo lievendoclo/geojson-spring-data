@@ -1,5 +1,6 @@
 package be.insaneprogramming.geojson;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,6 +15,10 @@ public class MultiPolygon extends GeoJsonObject<Polygon> {
 
     public MultiPolygon(Collection<? extends Polygon> c) {
         super(c);
+    }
+
+    public MultiPolygon(Polygon... polygons) {
+        this(Arrays.asList(polygons));
     }
 
     MultiPolygon(Object object) {
