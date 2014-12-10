@@ -40,9 +40,7 @@ public class GeoJsonConverters {
         public DBObject convert(Point source) {
             DBObject dbObject = new BasicDBObject();
             dbObject.put("type", source.getType());
-            List<Double> coordinates = new ArrayList<>();
-            coordinates.addAll(source);
-            dbObject.put("coordinates", coordinates);
+            dbObject.put("coordinates", source.getCoordinates());
             if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
                 dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
@@ -57,9 +55,11 @@ public class GeoJsonConverters {
         public DBObject convert(LineString source) {
             DBObject dbObject = new BasicDBObject();
             dbObject.put("type", source.getType());
-            List<List<Double>> coordinates = new ArrayList<>();
-            coordinates.addAll(source);
-            dbObject.put("coordinates", coordinates);
+            BasicDBList list = new BasicDBList();
+            for (Point point : source) {
+                list.add(point.getCoordinates());
+            }
+            dbObject.put("coordinates", list);
             if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
                 dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
@@ -74,9 +74,15 @@ public class GeoJsonConverters {
         public DBObject convert(Polygon source) {
             DBObject dbObject = new BasicDBObject();
             dbObject.put("type", source.getType());
-            List<List<? extends List<Double>>> coordinates = new ArrayList<>();
-            coordinates.addAll(source);
-            dbObject.put("coordinates", coordinates);
+            BasicDBList list = new BasicDBList();
+            for (List<Point> lists : source) {
+                BasicDBList innerList = new BasicDBList();
+                    for (Point point : lists) {
+                        innerList.add(point.getCoordinates());
+                    }
+                list.add(innerList);
+            }
+            dbObject.put("coordinates", list);
             if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
                 dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
@@ -91,9 +97,11 @@ public class GeoJsonConverters {
         public DBObject convert(MultiPoint source) {
             DBObject dbObject = new BasicDBObject();
             dbObject.put("type", source.getType());
-            List<List<Double>> coordinates = new ArrayList<>();
-            coordinates.addAll(source);
-            dbObject.put("coordinates", coordinates);
+            BasicDBList list = new BasicDBList();
+            for (Point point : source) {
+                list.add(point.getCoordinates());
+            }
+            dbObject.put("coordinates", list);
             if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
                 dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
@@ -108,9 +116,15 @@ public class GeoJsonConverters {
         public DBObject convert(MultiLineString source) {
             DBObject dbObject = new BasicDBObject();
             dbObject.put("type", source.getType());
-            List<List<? extends List<Double>>> coordinates = new ArrayList<>();
-            coordinates.addAll(source);
-            dbObject.put("coordinates", coordinates);
+            BasicDBList list = new BasicDBList();
+            for (LineString lineString : source) {
+                BasicDBList innerList = new BasicDBList();
+                for (Point point : lineString) {
+                    innerList.add(point.getCoordinates());
+                }
+                list.add(innerList);
+            }
+            dbObject.put("coordinates", list);
             if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
                 dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
@@ -125,9 +139,19 @@ public class GeoJsonConverters {
         public DBObject convert(MultiPolygon source) {
             DBObject dbObject = new BasicDBObject();
             dbObject.put("type", source.getType());
-            List<List<List<? extends List<Double>>>> coordinates = new ArrayList<>();
-            coordinates.addAll(source);
-            dbObject.put("coordinates", coordinates);
+            BasicDBList list = new BasicDBList();
+            for (Polygon polygon : source) {
+                BasicDBList innerList = new BasicDBList();
+                for (List<Point> pointList : polygon) {
+                    BasicDBList innerInnerList = new BasicDBList();
+                    for (Point point : pointList) {
+                        innerInnerList.add(point.getCoordinates());
+                    }
+                    innerList.add(innerInnerList);
+                }
+                list.add(innerList);
+            }
+            dbObject.put("coordinates", list);
             if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
                 dbObject.put("bbox", source.getBoundingBox());
             return dbObject;

@@ -11,6 +11,7 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -30,21 +31,17 @@ public class EmbeddedMongoDbTest {
     @ClassRule
     public static EmbeddedMongoRule embeddedMongo = new EmbeddedMongoRule();
 
-    private static MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
 
-    @BeforeClass
-    public static void setupTemplate() {
+    @Before
+    public void setup() {
+        embeddedMongo.cleanup();
         MongoDbFactory factory = new SimpleMongoDbFactory(embeddedMongo.getMongo(), embeddedMongo.getTestDatabaseName());
         MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(factory), new MongoMappingContext());
         CustomConversions customConversions = new CustomConversions(GeoJsonConverters.getConvertersToRegister());
         converter.setCustomConversions(customConversions);
         customConversions.registerConvertersIn((GenericConversionService) converter.getConversionService());
         mongoTemplate = new MongoTemplate(factory, converter);
-    }
-
-    @Before
-    public void cleanup() {
-        embeddedMongo.cleanup();
     }
 
     protected Mongo getMongo() {
@@ -55,13 +52,14 @@ public class EmbeddedMongoDbTest {
         return embeddedMongo.getTestDatabase();
     }
 
-    protected static MongoTemplate getMongoTemplate() {
+    protected MongoTemplate getMongoTemplate() {
         return mongoTemplate;
     }
 
     public static class EmbeddedMongoRule extends ExternalResource {
         MongodExecutable mongodExecutable = null;
         private int port;
+        private Mongo mongo;
 
         @Override
         protected void before() throws Throwable {
@@ -73,10 +71,12 @@ public class EmbeddedMongoDbTest {
                     .build();
             mongodExecutable = starter.prepare(mongodConfig);
             mongodExecutable.start();
+            mongo = new MongoClient("localhost", getPort());
         }
 
         @Override
         protected void after() {
+            mongo.close();
             if (mongodExecutable != null)
                 mongodExecutable.stop();
         }
@@ -86,19 +86,11 @@ public class EmbeddedMongoDbTest {
         }
 
         public Mongo getMongo() {
-            try {
-                return new MongoClient("localhost", getPort());
-            } catch (UnknownHostException e) {
-                throw new IllegalStateException();
-            }
+            return mongo;
         }
 
         public DB getTestDatabase() {
-            try {
-                return new MongoClient("localhost", getPort()).getDB(getTestDatabaseName());
-            } catch (UnknownHostException e) {
-                throw new IllegalStateException();
-            }
+            return getMongo().getDB(getTestDatabaseName());
         }
 
         public String getTestDatabaseName() {

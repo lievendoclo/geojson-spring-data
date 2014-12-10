@@ -3,7 +3,7 @@ package be.insaneprogramming.geojson;
 import java.util.Arrays;
 import java.util.List;
 
-public class Point extends GeoJsonObject<Double> implements List<Double> {
+public class Point extends GeoJsonObject<Double> {
 	public Point(List<Double> coordinates) {
 		super(coordinates);
 	}
@@ -22,5 +22,9 @@ public class Point extends GeoJsonObject<Double> implements List<Double> {
 	}
 
 	public Point() {
+	}
+
+	Double[] getCoordinates() {
+		return this.toArray(new Double[this.size()]);
 	}
 }

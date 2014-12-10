@@ -38,7 +38,7 @@ public class CheckGeospatialIndexTest extends EmbeddedMongoDbTest {
 
     @Test
     public void testMultiPolygonGeospatialIndexing() {
-        getMongoTemplate().save(new MultiPolygonDocument(new MultiPolygon(Arrays.asList(Arrays.asList(Arrays.asList(new Point(100., 0.), new Point(101., 0.), new Point(101., 1.), new Point(100., 1.), new Point(100., 0.)))))));
+        getMongoTemplate().save(new MultiPolygonDocument(new MultiPolygon(Arrays.asList(new Polygon(Arrays.asList(Arrays.asList(new Point(100., 0.), new Point(101., 0.), new Point(101., 1.), new Point(100., 1.), new Point(100., 0.))))))));
     }
 
     @Document

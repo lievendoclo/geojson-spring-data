@@ -12,7 +12,7 @@ public class MultiPolygon extends GeoJsonObject<Polygon> {
     public MultiPolygon() {
     }
 
-    public MultiPolygon(Collection<? extends List<List<Point>>> c) {
+    public MultiPolygon(Collection<? extends Polygon> c) {
         super(c);
     }
 

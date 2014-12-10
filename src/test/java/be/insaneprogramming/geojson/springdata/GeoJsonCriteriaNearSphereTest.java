@@ -11,10 +11,10 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class GeoJsonCriteriaTest extends EmbeddedMongoDbTest {
+public class GeoJsonCriteriaNearSphereTest extends EmbeddedMongoDbTest {
     @Before
     public void setupTestData() {
         getMongoTemplate().save(new GeoLocation("One", new Point(10.,10.)));
@@ -25,8 +25,8 @@ public class GeoJsonCriteriaTest extends EmbeddedMongoDbTest {
     }
 
     @Test
-    public void testNearPoint() {
-        Query query = Query.query(GeoJsonCriteria.where("location").near(new Point(0., 0.)));
+    public void testPointNearSpherePoint() {
+        Query query = Query.query(GeoJsonCriteria.where("location").nearSphere(new Point(0., 0.)));
         List<GeoLocation> nearestLocations = getMongoTemplate().find(query, GeoLocation.class);
         assertThat(nearestLocations.get(0).getName(), equalTo("One"));
     }

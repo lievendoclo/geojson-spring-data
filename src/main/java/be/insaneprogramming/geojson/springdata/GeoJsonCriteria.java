@@ -2,6 +2,7 @@ package be.insaneprogramming.geojson.springdata;
 
 import be.insaneprogramming.geojson.GeoJsonObject;
 import be.insaneprogramming.geojson.MultiPolygon;
+import be.insaneprogramming.geojson.Point;
 import be.insaneprogramming.geojson.Polygon;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -102,8 +103,8 @@ public class GeoJsonCriteria implements CriteriaDefinition {
      * @param geoJsonObject must not be {@literal null}
      * @return
      */
-    public GeoJsonCriteria near(GeoJsonObject<?> geoJsonObject) {
-        criteria.put("$near", new GeometryWrapper(geoJsonObject));
+    public GeoJsonCriteria near(Point point) {
+        criteria.put("$near", new GeometryWrapper(point));
         return this;
     }
 
@@ -114,8 +115,8 @@ public class GeoJsonCriteria implements CriteriaDefinition {
      * @param geoJsonObject must not be {@literal null}
      * @return
      */
-    public GeoJsonCriteria nearSphere(GeoJsonObject<?> geoJsonObject) {
-        criteria.put("$nearSphere", new GeometryWrapper(geoJsonObject));
+    public GeoJsonCriteria nearSphere(Point point) {
+        criteria.put("$nearSphere", new GeometryWrapper(point));
         return this;
     }
 
