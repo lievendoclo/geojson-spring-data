@@ -1,5 +1,6 @@
 package be.insaneprogramming.util;
 
+import be.insaneprogramming.geojson.GeoJsonConverters;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
@@ -11,14 +12,35 @@ import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
+import org.springframework.core.convert.support.GenericConversionService;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 import java.net.UnknownHostException;
 
 public class EmbeddedMongoDbTest {
     @ClassRule
     public static EmbeddedMongoRule embeddedMongo = new EmbeddedMongoRule();
+
+    private static MongoTemplate mongoTemplate;
+
+    @BeforeClass
+    public static void setupTemplate() {
+        MongoDbFactory factory = new SimpleMongoDbFactory(embeddedMongo.getMongo(), embeddedMongo.getTestDatabaseName());
+        MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(factory), new MongoMappingContext());
+        CustomConversions customConversions = new CustomConversions(GeoJsonConverters.getConvertersToRegister());
+        converter.setCustomConversions(customConversions);
+        customConversions.registerConvertersIn((GenericConversionService) converter.getConversionService());
+        mongoTemplate = new MongoTemplate(factory, converter);
+    }
 
     @Before
     public void cleanup() {
@@ -31,6 +53,10 @@ public class EmbeddedMongoDbTest {
 
     protected DB getTestDatabase() {
         return embeddedMongo.getTestDatabase();
+    }
+
+    protected static MongoTemplate getMongoTemplate() {
+        return mongoTemplate;
     }
 
     public static class EmbeddedMongoRule extends ExternalResource {
@@ -69,10 +95,14 @@ public class EmbeddedMongoDbTest {
 
         public DB getTestDatabase() {
             try {
-                return new MongoClient("localhost", getPort()).getDB("test");
+                return new MongoClient("localhost", getPort()).getDB(getTestDatabaseName());
             } catch (UnknownHostException e) {
                 throw new IllegalStateException();
             }
+        }
+
+        public String getTestDatabaseName() {
+            return "test";
         }
 
         public void cleanup() {

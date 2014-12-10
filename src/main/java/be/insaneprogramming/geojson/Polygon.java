@@ -3,7 +3,7 @@ package be.insaneprogramming.geojson;
 import java.util.Collection;
 import java.util.List;
 
-public class Polygon extends GeoJsonObject<List<Point>> {
+public class Polygon extends GeoJsonObject<List<? extends List<Double>>> {
     @Override
     public String getType() {
         return "Polygon";
