@@ -14,4 +14,10 @@ public class GeometryCollection extends ArrayList<GeoJsonObject<?>> {
     public String getType() {
         return "GeometryCollection";
     }
+
+    public void validate(PointValidator validator) {
+        for (GeoJsonObject<?> geoJsonObject : this) {
+            geoJsonObject.validate(validator);
+        }
+    }
 }
