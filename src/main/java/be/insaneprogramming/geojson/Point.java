@@ -17,6 +17,11 @@ public class Point extends GeoJsonObject<Double> {
 	}
 
 	@Override
+	public void validate(PointValidator pointValidator) {
+		pointValidator.validate(this);
+	}
+
+	@Override
 	public String getType() {
 		return "Point";
 	}

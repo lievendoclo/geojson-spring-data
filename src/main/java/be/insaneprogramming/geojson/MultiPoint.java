@@ -23,4 +23,12 @@ public class MultiPoint extends GeoJsonObject<Point> {
     MultiPoint(Object object) {
         super(object);
     }
+
+    @Override
+    public void validate(PointValidator pointValidator) {
+        if(this.size() == 0 ) throw new IllegalStateException("A MultiPoint must contain at least 1 point");
+        for (Point point : this) {
+            pointValidator.validate(point);
+        }
+    }
 }

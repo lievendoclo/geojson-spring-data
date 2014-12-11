@@ -20,6 +20,14 @@ public class MultiLineString extends GeoJsonObject<LineString> {
         this(Arrays.asList(lineStrings));
     }
 
+    @Override
+    public void validate(PointValidator pointValidator) {
+        if(this.size() == 0 ) throw new IllegalStateException("A MultiLineString must contain at least 1 point");
+        for (LineString lineString : this) {
+            lineString.validate(pointValidator);
+        }
+    }
+
     MultiLineString(Object object) {
         super(object);
     }

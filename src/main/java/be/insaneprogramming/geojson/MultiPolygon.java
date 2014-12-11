@@ -24,4 +24,12 @@ public class MultiPolygon extends GeoJsonObject<Polygon> {
     MultiPolygon(Object object) {
         super(object);
     }
+
+    @Override
+    public void validate(PointValidator pointValidator) {
+        if(size() == 0) throw new IllegalStateException("A MultiPolygon must contain at least 1 polygon");
+        for (Polygon polygon : this) {
+            polygon.validate(pointValidator);
+        }
+    }
 }

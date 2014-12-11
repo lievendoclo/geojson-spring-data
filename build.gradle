@@ -2,7 +2,10 @@ apply plugin: 'java'
 
 group = "be.insaneprogramming.geojson"
 version = "1.0.0-SNAPSHOT"
-description = "An awesome groovy library"
+description = "GeoJSON support for Spring Data for MongoDB"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 repositories {
     jcenter()

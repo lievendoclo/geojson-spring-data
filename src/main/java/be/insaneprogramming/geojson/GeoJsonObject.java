@@ -54,4 +54,6 @@ public abstract class GeoJsonObject<T> extends ArrayList<T> {
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
 	}
+
+	public abstract void validate(PointValidator pointValidator);
 }
