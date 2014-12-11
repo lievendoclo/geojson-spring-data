@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lievendoclo/geojson-spring-data.svg?branch=master)](https://travis-ci.org/lievendoclo/geojson-spring-data)
+
 # Support for GeoJSON classes in Spring Data for MongoDB
 
 Currently Spring Data for MongoDB has support for geospatial geometries, but they do not use the GeoJSON representation.
