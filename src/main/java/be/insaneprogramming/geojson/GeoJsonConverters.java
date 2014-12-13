@@ -10,9 +10,17 @@ import org.springframework.data.convert.WritingConverter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * List of converters to be used with Spring Data to convert GeoJSON class instances
+ * into MongoDB DBObject instances
+ */
 public class GeoJsonConverters {
     private GeoJsonConverters() {}
 
+    /**
+     * Get all the converters for GeoJSON to DBObject conversion and vice versa.
+     * @return A list of all the converters
+     */
     public static List<Converter<?, ?>> getConvertersToRegister() {
         List<Converter<?, ?>> converters = new ArrayList<>();
         converters.add(PointToDBObjectConverter.INSTANCE);
@@ -32,6 +40,20 @@ public class GeoJsonConverters {
         return converters;
     }
 
+    private static class ConverterUtil {
+        private ConverterUtil() {}
+
+        public static void addBasicProperties(GeoJsonObject object, DBObject dbObject) {
+            dbObject.put("type", object.getType());
+            if(object.getBoundingBox() != null && object.getBoundingBox().length > 0) {
+                dbObject.put("bbox", object.getBoundingBox());
+            }
+            if(object.getProperties() != null && object.getProperties().size() > 0) {
+                dbObject.put("properties", object.getProperties());
+            }
+        }
+    }
+
     @WritingConverter
     public static enum PointToDBObjectConverter implements Converter<Point, DBObject> {
         INSTANCE;
@@ -39,10 +61,8 @@ public class GeoJsonConverters {
         @Override
         public DBObject convert(Point source) {
             DBObject dbObject = new BasicDBObject();
-            dbObject.put("type", source.getType());
+            ConverterUtil.addBasicProperties(source, dbObject);
             dbObject.put("coordinates", source.getCoordinates());
-            if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
-                dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
         }
     }
@@ -54,14 +74,12 @@ public class GeoJsonConverters {
         @Override
         public DBObject convert(LineString source) {
             DBObject dbObject = new BasicDBObject();
-            dbObject.put("type", source.getType());
+            ConverterUtil.addBasicProperties(source, dbObject);
             BasicDBList list = new BasicDBList();
             for (Point point : source) {
                 list.add(point.getCoordinates());
             }
             dbObject.put("coordinates", list);
-            if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
-                dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
         }
     }
@@ -73,7 +91,7 @@ public class GeoJsonConverters {
         @Override
         public DBObject convert(Polygon source) {
             DBObject dbObject = new BasicDBObject();
-            dbObject.put("type", source.getType());
+            ConverterUtil.addBasicProperties(source, dbObject);
             BasicDBList list = new BasicDBList();
             for (List<Point> lists : source) {
                 BasicDBList innerList = new BasicDBList();
@@ -83,8 +101,6 @@ public class GeoJsonConverters {
                 list.add(innerList);
             }
             dbObject.put("coordinates", list);
-            if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
-                dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
         }
     }
@@ -96,14 +112,12 @@ public class GeoJsonConverters {
         @Override
         public DBObject convert(MultiPoint source) {
             DBObject dbObject = new BasicDBObject();
-            dbObject.put("type", source.getType());
+            ConverterUtil.addBasicProperties(source, dbObject);
             BasicDBList list = new BasicDBList();
             for (Point point : source) {
                 list.add(point.getCoordinates());
             }
             dbObject.put("coordinates", list);
-            if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
-                dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
         }
     }
@@ -115,7 +129,7 @@ public class GeoJsonConverters {
         @Override
         public DBObject convert(MultiLineString source) {
             DBObject dbObject = new BasicDBObject();
-            dbObject.put("type", source.getType());
+            ConverterUtil.addBasicProperties(source, dbObject);
             BasicDBList list = new BasicDBList();
             for (LineString lineString : source) {
                 BasicDBList innerList = new BasicDBList();
@@ -125,8 +139,6 @@ public class GeoJsonConverters {
                 list.add(innerList);
             }
             dbObject.put("coordinates", list);
-            if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
-                dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
         }
     }
@@ -138,7 +150,7 @@ public class GeoJsonConverters {
         @Override
         public DBObject convert(MultiPolygon source) {
             DBObject dbObject = new BasicDBObject();
-            dbObject.put("type", source.getType());
+            ConverterUtil.addBasicProperties(source, dbObject);
             BasicDBList list = new BasicDBList();
             for (Polygon polygon : source) {
                 BasicDBList innerList = new BasicDBList();
@@ -152,8 +164,6 @@ public class GeoJsonConverters {
                 list.add(innerList);
             }
             dbObject.put("coordinates", list);
-            if(source.getBoundingBox() != null && source.getBoundingBox().length > 0)
-                dbObject.put("bbox", source.getBoundingBox());
             return dbObject;
         }
     }
@@ -165,7 +175,7 @@ public class GeoJsonConverters {
         @Override
         public DBObject convert(GeometryCollection source) {
             DBObject dbObject = new BasicDBObject();
-            dbObject.put("type", source.getType());
+            ConverterUtil.addBasicProperties(source, dbObject);
             List<DBObject> geometries = new ArrayList<>();
             for (GeoJsonObject<?> object : source) {
                 switch(object.getClass().getSimpleName()) {

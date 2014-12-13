@@ -3,7 +3,10 @@ package be.insaneprogramming.geojson;
 import java.util.Arrays;
 import java.util.List;
 
-public class Point extends GeoJsonObject<Double> {
+/**
+ * A Point is a geometry consisting of a single position
+ */
+public class Point extends AbstractGeoJsonObject<Double> {
 	public Point(List<Double> coordinates) {
 		super(coordinates);
 	}
@@ -12,7 +15,7 @@ public class Point extends GeoJsonObject<Double> {
 		super(Arrays.asList(coordinates));
 	}
 
-	public Point(Object o) {
+	Point(Object o) {
 		super(o);
 	}
 
@@ -29,6 +32,10 @@ public class Point extends GeoJsonObject<Double> {
 	public Point() {
 	}
 
+	/**
+	 * Get the coordinates for this point in the form of a array of doubles
+	 * @return The coordinates for this point
+	 */
 	Double[] getCoordinates() {
 		return this.toArray(new Double[this.size()]);
 	}

@@ -1,6 +1,6 @@
 package be.insaneprogramming.geojson.springdata;
 
-import be.insaneprogramming.geojson.GeoJsonObject;
+import be.insaneprogramming.geojson.AbstractGeoJsonObject;
 import be.insaneprogramming.geojson.MultiPolygon;
 import be.insaneprogramming.geojson.Point;
 import be.insaneprogramming.geojson.Polygon;
@@ -163,7 +163,7 @@ public class GeoJsonCriteria implements CriteriaDefinition {
      * @param geoJsonObject
      * @return
      */
-    public GeoJsonCriteria intersects(GeoJsonObject<?> geoJsonObject) {
+    public GeoJsonCriteria intersects(AbstractGeoJsonObject<?> geoJsonObject) {
         criteria.put("$geoIntersects", new GeometryWrapper(geoJsonObject));
         return this;
     }

@@ -2,9 +2,11 @@ package be.insaneprogramming.geojson;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-public class MultiPolygon extends GeoJsonObject<Polygon> {
+/**
+ * A MultiPolygon is a geometry consisting of multiple polygons.
+ */
+public class MultiPolygon extends AbstractGeoJsonObject<Polygon> {
     @Override
     public String getType() {
         return "MultiPolygon";

@@ -5,7 +5,7 @@ import com.mongodb.BasicDBObject;
 
 public class GeometryWrapper extends BasicDBObject {
 
-    public GeometryWrapper(GeoJsonObject<?> geoJsonObject) {
+    public GeometryWrapper(AbstractGeoJsonObject<?> geoJsonObject) {
         switch(geoJsonObject.getClass().getSimpleName()) {
             case "Point":
                 this.put("$geometry", GeoJsonConverters.PointToDBObjectConverter.INSTANCE.convert((Point) geoJsonObject));

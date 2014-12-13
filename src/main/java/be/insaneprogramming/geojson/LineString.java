@@ -3,6 +3,9 @@ package be.insaneprogramming.geojson;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * A MultiPoint is a geometry consisting of multiple points.
+ */
 public class LineString extends MultiPoint {
     public LineString() {
     }

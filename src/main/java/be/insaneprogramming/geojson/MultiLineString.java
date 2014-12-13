@@ -3,7 +3,10 @@ package be.insaneprogramming.geojson;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class MultiLineString extends GeoJsonObject<LineString> {
+/**
+ * A MultiLineString is a geometry consisting of multiple LineStrings.
+ */
+public class MultiLineString extends AbstractGeoJsonObject<LineString> {
     @Override
     public String getType() {
         return "MultiLineString";

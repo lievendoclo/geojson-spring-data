@@ -3,8 +3,10 @@ package be.insaneprogramming.geojson.validation;
 import be.insaneprogramming.geojson.PointValidator;
 
 import java.util.List;
-import java.util.Objects;
 
+/**
+ * Validates whether a point contains a valid longitude and latitude
+ */
 public enum LongitudeLatitudePointValidator implements PointValidator {
     INSTANCE;
 

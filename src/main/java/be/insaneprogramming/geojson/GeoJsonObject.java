@@ -1,59 +1,21 @@
 package be.insaneprogramming.geojson;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-public abstract class GeoJsonObject<T> extends ArrayList<T> {
 
-	public abstract String getType();
+public interface GeoJsonObject<T> extends List<T> {
+	String getType();
 
-	private CoordinateReferenceSystem coordinateReferenceSystem;
-	private double[] boundingBox;
+	CoordinateReferenceSystem getCoordinateReferenceSystem();
 
-	public GeoJsonObject() {
-	}
+	double[] getBoundingBox();
 
-	public GeoJsonObject(Collection<? extends T> c) {
-		super(c);
-	}
+	Map<String, Object> getProperties();
 
-	GeoJsonObject(Object o) {
-		this((Collection<? extends T>) o);
-	}
-
-	private Map<String, Object> properties = new HashMap<String, Object>();
-
-	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
-		return coordinateReferenceSystem;
-	}
-
-	public void setCoordinateReferenceSystem(CoordinateReferenceSystem coordinateReferenceSystem) {
-		this.coordinateReferenceSystem = coordinateReferenceSystem;
-	}
-
-	public double[] getBoundingBox() {
-		return boundingBox;
-	}
-
-	public void setBoundingBox(double[] boundingBox) {
-		this.boundingBox = boundingBox;
-	}
-
-	public void setProperty(String key, Object value) {
-		properties.put(key, value);
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T getProperty(String key) {
-		return (T)properties.get(key);
-	}
-
-	public Map<String, Object> getProperties() {
-		return properties;
-	}
-
-	public void setProperties(Map<String, Object> properties) {
-		this.properties = properties;
-	}
-
-	public abstract void validate(PointValidator pointValidator);
+	/**
+	 * Validate this geometry and the points within it.
+	 * @param pointValidator The validator which validates the individual points
+	 */
+	void validate(PointValidator pointValidator);
 }

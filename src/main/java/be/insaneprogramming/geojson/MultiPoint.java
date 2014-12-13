@@ -3,7 +3,10 @@ package be.insaneprogramming.geojson;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class MultiPoint extends GeoJsonObject<Point> {
+/**
+ * A MultiPoint is a geometry consisting of multiple points.
+ */
+public class MultiPoint extends AbstractGeoJsonObject<Point> {
     @Override
     public String getType() {
         return "MultiPoint";

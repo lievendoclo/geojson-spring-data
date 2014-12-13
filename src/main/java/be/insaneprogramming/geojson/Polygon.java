@@ -5,7 +5,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class Polygon extends GeoJsonObject<List<Point>> {
+/**
+ * A Point is a geometry consisting of a multiple rings. Each ring is
+ * a list of points.
+ */
+public class Polygon extends AbstractGeoJsonObject<List<Point>> {
     public Polygon() {
     }
 
